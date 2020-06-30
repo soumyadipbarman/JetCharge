@@ -3,7 +3,7 @@ import os, sys
 import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 #from importlib import import_module
-from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import PostProcessor
+#from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import PostProcessor
 
 from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collection, Object
@@ -90,6 +90,7 @@ class Jetcharge_skimNANO(Module):
 
 # define modules using the syntax 'name = lambda : constructor' to avoid having them loaded when not needed
 
-jetskimmer = lambda : Jetcharge_skimNANO(jetSelection= lambda j : j.pt > 30)
+#jetskimmer = lambda : Jetcharge_skimNANO(jetSelection= lambda j : j.pt > 30)
+jetskimmer = lambda : Jetcharge_skimNANO()
 
 

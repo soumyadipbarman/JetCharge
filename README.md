@@ -1,3 +1,11 @@
+# Jet Charge Observables at 13 TeV using NanoAOD format 
+
+# 20JUNE2020-v2
+This is the working version (Initial framework)
+
+# NanoAOD Workbook
+https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookNanoAOD
+
 # nanoAOD-tools
 Tools for working with NanoAOD (requiring only python + root, not CMSSW)
 
@@ -16,18 +24,24 @@ Please never commit neither the build directory, nor the empty init.py files cre
 
 ## Checkout instructions: CMSSW
 
-    cd $CMSSW_BASE/src
-    git clone https://github.com/cms-nanoAOD/nanoAOD-tools.git PhysicsTools/NanoAODTools
+    mkdir JetCharge
+    cd JetCharge
+    cmsrel CMMSW_10_2_22           # CMSSW_10_2_22 minimum for NanaoAODv7
+    cd CMSSW_10_2_22/src
+    git clone https://github.com/cms-nanoAOD/nanoAOD-tools.git PhysicsTools/NanoAODTools    #ref
     cd PhysicsTools/NanoAODTools
     cmsenv
     scram b
 
+## Setup the code
+
+    git clone git@github.com:soumyadipbarman/JetCharge.git  
+  
 ## General instructions to run the post-processing step
 
 The script to run the post-processing step is `scripts/nano_postproc.py`.
 
 The basic syntax of the command is the following:
-
     python scripts/nano_postproc.py /path/to/output_directory /path/to/input_tree.root
 
 Here is a summary of its features:

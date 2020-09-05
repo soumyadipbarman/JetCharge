@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import os, sys
+#import os, sys
 import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 #from importlib import import_module
@@ -9,84 +9,130 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collection, Object
 from PhysicsTools.NanoAODTools.postprocessing.tools import *
 #from PhysicsTools.NanoAODTools.postprocessing.modules.jme.jetmetUncertainties import *
+#from PhysicsTools.NanoAODTools.postprocessing.modules.jme.jetSmearer import jetSmearer
 
 import math as m
-from array import array
+import array
 import numpy
 import random
 import copy
+import datetime
 
 class Jetcharge_skimNANO(Module):
-        def __init__(self, jetSelection): #, jetSelection):
-                self.jetSel = jetSelection
+        #def __init__(self, jetSelection): #, jetSelection):       #crab                                       
+        def __init__(self,EventLimit=-1):                          #local
+                #self.jetSel = jetSelection  
 		self.writeHistFile=True
-                #self.puppimetBranchName= "PuppiMET"
-                #self.rawmetBranchName= "RawMET"
-                #self.pfmetBranchName= "MET"
-                #self.flagBranchName= "Flag"
                 #self.hltBranchName= "HLT"
 		print "Running Jetcharge_skimNANO Module......"
-                pass
-        def beginJob(self,histFile=None,histDirName=None):
-		Module.beginJob(self,histFile,histDirName)
+                #pass
+		#event counters
+        	self.EventCounter = 0  
+		self.EventLimit = EventLimit     #max events to be processed
 
-		#ROOT.gSystem.Load("libPhysicsToolsNanoAODJMARTools.so")
+		### Kinematics Cuts ###
+        	self.minJetPt = 30.
+        	self.maxObjEta = 2.5
+		#j1 = None
+		#j2 = None
+		self.hltBranchName= "HLT"
 
-		self.h_recopt=ROOT.TH1F('recopt',   'recopt',   100, 0, 1000)
-        	self.addObject(self.h_recopt)
-		self.h_recoeta=ROOT.TH1F('recoeta',   'recoeta',   40, -3, 3)
-		self.addObject(self.h_recoeta)
-		self.h_recophi=ROOT.TH1F('recophi',   'recophi',   100, -5, 5)
-                self.addObject(self.h_recophi)
-                pass
+        def beginJob(self, histFile, histDirName):
+		Module.beginJob(self, histFile, histDirName)
+		
+		ROOT.gSystem.Load("libPhysicsToolsNanoAODJMARTools.so")
+
+		self.histotype = ['h_']
+
+		for ihist, hist in enumerate(self.histotype):
+		    self.addObject( ROOT.TH1F(hist + 'nrawjet',            hist + 'nrawjet',        10, 0, 10 ))
+		    self.addObject( ROOT.TH1F(hist + 'rawjetpt',           hist + 'rawjetpt',        100, 0, 1000 ) )
+		    self.addObject( ROOT.TH1F(hist + 'rawjeteta',          hist + 'rawjeteta',        40, -5, 5 ) )
+		    self.addObject( ROOT.TH1F(hist + 'rawjetphi',          hist + 'rawjetphi',        100, -5, 5 ) )
+		    self.addObject( ROOT.TH1F(hist + 'rawjetpt0',           hist + 'rawjetpt0',        100, 0, 1000 ) )
+                    self.addObject( ROOT.TH1F(hist + 'rawjeteta0',          hist + 'rawjeteta0',        40, -5, 5 ) )
+                    self.addObject( ROOT.TH1F(hist + 'rawjetphi0',          hist + 'rawjetphi0',        100, -5, 5 ) )
+		    self.addObject( ROOT.TH1F(hist + 'rawjetpt1',           hist + 'rawjetpt1',        100, 0, 1000 ) )
+                    self.addObject( ROOT.TH1F(hist + 'rawjeteta1',          hist + 'rawjeteta1',        40, -5, 5 ) )
+                    self.addObject( ROOT.TH1F(hist + 'rawjetphi1',          hist + 'rawjetphi1',        100, -5, 5 ) )
+	
+		#self.h_recopt=ROOT.TH1F('recopt',   'recopt',   100, 0, 1000)
+        	#self.addObject(self.h_recopt)
+                  
         def endJob(self):
+		Module.endJob(self)
                 pass
         def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
                 self.out = wrappedOutputTree
-                #self.out.branch("diele_mass", "F");
-                #self.out.branch("ele_px", "F");
-                #self.out.branch("ele_py", "F");
-                #self.out.branch("uparallel_PFMET", "F");
-                #self.out.branch("uparpendicular_PFMET", "F");
-                #self.out.branch("ele_lead_pt", "F");
-                #self.out.branch("ele_sublead_pt", "F");
-                #self.out.branch("uparallel_RawMET", "F");
-                #self.out.branch("uparpendicular_RawMET", "F");
-                #self.out.branch("uparallel_PuppiMET", "F");
-                #self.out.branch("uparpendicular_PuppiMET", "F");
-                #self.out.branch("Gen_pdgID", "I");
-                #self.out.branch("Gen_ele_pt", "F");
-		self.out.branch("recojetpt", "F")
-		self.out.branch("recojeteta", "F")
-		self.out.branch("recojetphi", "F")
-		#self.out.branch("jet_e", "F")
-		self.out.branch()
+		self.out.branch("nrawjet", "I")
+		self.out.branch("rawjetpt", "F")
+		self.out.branch("rawjeteta", "F")
+		self.out.branch("rawjetphi", "F")  
+		#self.out.branch()  
+		pass
         def endFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
-                pass
+                pass      
 	def analyze(self, event):
 		"""process event, return True (go to next module) or False (fail, go to next event)"""
+	        #Event counters, max events to be processed for local running of jobs
+		current_time = datetime.datetime.now()
+                self.EventCounter +=1
 
-		jets = Collection(event, "Jet")
-		#hlt = Object(event, self.hltBranchName)
-		recojet = ROOT.TLorentzVector()
-		#jet_count1 = 0
-		#jet_count2 = 0
-		#event selection
-		#print("Event")
-		for j in filter(self.jetSel,jets):
-			#if (abs(j.pt>30 and j.eta<2.5)):
-				#if(trigger_selection):
-		 print("event: 1")
-		recojet += j.p4()
-		self.out.fillBranch("recojetpt", recojet.pt())
-		self.out.fillBranch("recojeteta", recojet.eta())
-		self.out.fillBranch("recojetphi", recojet.phi())
+		print'Number of Events processed :', self.EventCounter, 'at', current_time, 'CEST'
+     		
+		if self.EventCounter > self.EventLimit > -1:
+                	return False
 		
-		self.h_recopt.Fill(recojet.pt())
-		self.h_recoeta.Fill(recojet.eta())
-		self.h_recophi.Fill(recojet.phi())
+		###### Get list of reco jets #######
+        	# List of reco jets:
+        	allrecojets = list(Collection(event, "Jet"))
+        	allrecoparts = list(Collection(event, "JetPFCands"))
+
+		hlt = Object(event, self.hltBranchName)
+		
+		recojets = []	
+		jet1 = ROOT.TLorentzVector()
+		jet2 = ROOT.TLorentzVector()
+		rawjet_count = []
+
+		#event selection
+	        if(hlt.PFJet40==1 or hlt.PFJet60==1 or hlt.PFJet80==1 or hlt.PFJet140==1 or hlt.PFJet200==1 or hlt.PFJet260==1 or hlt.PFJet320==1 or hlt.PFJet400==1 or hlt.PFJet450==1 or hlt.PFJet500==1 or hlt.PFJet550==1):
+		### applying basic selection to jets
+			#print 'Trigger Testing in'
+			recojets = [ x for x in allrecojets if x.p4().Perp() > self.minJetPt and abs(x.p4().Rapidity()) < self.maxObjEta and x.jetId > 1 ]
+			recojets.sort(key=lambda x:x.p4().Perp(),reverse=True)
+			#print 'Trigger Testing out'
+		#global j1,j2
+		if len(recojets) >= 2:
+			jet1 = recojets[0].p4()
+			jet2 = recojets[1].p4()
+			for irecojet,recojet in enumerate(recojets):
+				rawjet_count.append((irecojet,recojet))
+				self.out.fillBranch("rawjetpt", recojet.p4().Perp())
+	                	self.out.fillBranch("rawjeteta", recojet.p4().Eta())
+        	        	self.out.fillBranch("rawjetphi", recojet.p4().Phi())
+				self.h_rawjetpt.Fill(recojet.p4().Perp())
+	                	self.h_rawjeteta.Fill(recojet.p4().Eta())
+                		self.h_rawjetphi.Fill(recojet.p4().Phi())
+		
+		jetsel = len(rawjet_count)
+		self.out.fillBranch("nrawjet",jetsel)
+		self.h_nrawjet.Fill(jetsel)
+		self.h_rawjetpt0.Fill(jet1.Perp())
+		self.h_rawjeteta0.Fill(jet1.Eta())
+		self.h_rawjetphi0.Fill(jet1.Phi())
+		self.h_rawjetpt1.Fill(jet2.Perp())
+                self.h_rawjeteta1.Fill(jet2.Eta())
+                self.h_rawjetphi1.Fill(jet2.Phi())
+				
 		return True
 
+"""
+preselection="Jet_pt[0] > 400"
+files=["root://cmsxrootd.fnal.gov//store/data/Run2017B/JetHT/NANOAOD/Nano25Oct2019-v1/40000/F444480C-9D10-4041-9F8E-A67CF1D98368.root"]
+p=PostProcessor(".",files,cut=preselection,branchsel=None,modules=[Jetcharge_skimNANO()],noOut=True,histFileName="histOut.root",histDirName="jets13")
+p.run()
+"""
 
 # define modules using the syntax 'name = lambda : constructor' to avoid having them loaded when not needed
 

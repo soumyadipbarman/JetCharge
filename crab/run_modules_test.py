@@ -1,24 +1,26 @@
 #!/usr/bin/env python
 import FWCore.ParameterSet.Config as cms
 import os, sys
-import ROOT
-ROOT.PyConfig.IgnoreCommandLineOptions = True
-#from importlib import import_module
-from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import *
-#from Analysis.JetCharge.postprocessing.framework.postprocessor import *
+#import ROOT
+#ROOT.PyConfig.IgnoreCommandLineOptions = True
+from importlib import import_module
+#from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import *
+from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import PostProcessor
+from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collection
+from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 from PhysicsTools.NanoAODTools.postprocessing.framework.crabhelper import inputFiles,runsAndLumis
 #from PhysicsTools.NanoAODTools.postprocessing.examples.skimmer import jetskimmer                        #local
-#from PhysicsTools.NanoAODTools.postprocessing.examples.skimmer import *                                  #crab
-from Analysis.JetCharge.postprocessing.examples.skimmer import jetskimmer
+from PhysicsTools.NanoAODTools.postprocessing.examples.skimmer import *                                  #crab
 #from PhysicsTools.NanoAODTools.postprocessing.modules.jme.jetmetUncertainties import *
 #from PhysicsTools.NanoAODTools.postprocessing.modules.jme.jetmetHelperRun2 import *
 
 
-#files=["root://cms-xrd-global.cern.ch//store/data/Run2018B/EGamma/NANOAOD/Nano25Oct2019-v1/60000/C61D3EFD-DC56-7F41-B028-39F3FA070B13.root"]
-files=["root://cmsxrootd.fnal.gov//store/data/Run2017B/JetHT/NANOAOD/Nano25Oct2019-v1/40000/F444480C-9D10-4041-9F8E-A67CF1D98368.root"]
+#UL2017_Custom_NanoAOD_JetHT
+files=["root://cms-xrd-global.cern.ch//store/user/algomez/PFNano/106x_v01/JetHT/Run2017B-09Aug2019_UL2017-v1_PFNanoAOD/200716_075309/0000/nano106X_on_mini106X_2017_data_NANO_372.root"]
 
 #local run
-p=PostProcessor(".",files,"Jet_pt>30", modules=[jetskimmer()])
+p=PostProcessor(".",files, modules=[jetskimmer()],provenance=True,fwkJobReport=True,histFileName="histOut_DATA.root",histDirName="jets13",haddFileName ="trees.root",jsonInput=runsAndLumis())
+
 #p=PostProcessor(".",files,"Jet_pt>400","keep_and_drop.txt", modules=[jmeCorrections2018C_DATA_AK4CHS(), jetskimmer()],provenance=True,fwkJobReport=True,jsonInput=runsAndLumis())
 #p=PostProcessor(".",files,"Jet_pt>30", modules=[jmeCorrections2018_MC_AK4CHS(), MCeventselectionTest()],)
 
@@ -43,4 +45,4 @@ p = PostProcessor(
 """
 p.run()
 print "Done"
-os.system("ls -lR")       # not needed for local run
+#os.system("ls -lR")       # not needed for local run

@@ -9,7 +9,8 @@ process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring(),
 process.source.fileNames = [
 	'../../NanoAOD/test/lzma.root' ##you can change only this line
 ]
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(10))
-process.output = cms.OutputModule("PoolOutputModule", fileName = cms.untracked.string('tree.root'))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
+process.options = cms.untracked.PSet()
+process.output = cms.OutputModule("PoolOutputModule", fileName = cms.untracked.string('JetCharge_skimmer-trees.root'),fakeNameForCrab =cms.untracked.bool(True))
 process.out = cms.EndPath(process.output)
 

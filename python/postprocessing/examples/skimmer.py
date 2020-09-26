@@ -36,7 +36,7 @@ class Jetcharge_skimNANO(Module):
         	self.minJetPt = 30.
         	self.maxJetEta = 2.4
 
-		self.totalWeight = 1
+		#self.totalWeight = 1
 
         def beginJob(self, histFile, histDirName):
 		Module.beginJob(self, histFile, histDirName)
@@ -110,7 +110,12 @@ class Jetcharge_skimNANO(Module):
      		
 		if self.EventCounter > self.EventLimit > -1:
                 	return False
-		
+	
+		weight = 1.0
+
+        	if hasattr( event, "genWeight"):
+            		weight *= event.genWeight
+	
 		###### Get list of reco jets #######
         	# List of reco jets:
         	allrecojets = list(Collection(event, "Jet"))
@@ -189,55 +194,55 @@ class Jetcharge_skimNANO(Module):
 						if (recocands.p4().Perp() > 1):
 							if (recocands.charge != 0):
 								recoChgCands_count.append((irecocands,recocands))
-								self.h_jetchgpt.Fill(recocands.p4().Perp(), self.totalWeight)
-                                                                self.h_jetchgeta.Fill(recocands.p4().Eta(), self.totalWeight)
-                                                                self.h_jetchgphi.Fill(recocands.p4().Phi(), self.totalWeight)
+								self.h_jetchgpt.Fill(recocands.p4().Perp(), weight)
+                                                                self.h_jetchgeta.Fill(recocands.p4().Eta(), weight)
+                                                                self.h_jetchgphi.Fill(recocands.p4().Phi(), weight)
 								if (irecojet == 0):
 									recoChgCands1_count.append((irecocands,recocands))
-									self.h_jetchgpt1.Fill(recocands.p4().Perp(), self.totalWeight)
-                                                                	self.h_jetchgeta1.Fill(recocands.p4().Eta(), self.totalWeight)
-                                                                	self.h_jetchgphi1.Fill(recocands.p4().Phi(), self.totalWeight)
+									self.h_jetchgpt1.Fill(recocands.p4().Perp(), weight)
+                                                                	self.h_jetchgeta1.Fill(recocands.p4().Eta(), weight)
+                                                                	self.h_jetchgphi1.Fill(recocands.p4().Phi(), weight)
 									irecocands += 1
 									#mult1 += (multiplicity1)
 									#leadjet1 += (recocands.p4().Perp())#, self.totalWeight)
-									self.h_mult_leadjet1.Fill(recojet.p4().Perp(), irecocands, self.totalWeight)
+									self.h_mult_leadjet1.Fill(recojet.p4().Perp(), irecocands, weight)
 								if (irecojet == 1):
                                                                         recoChgCands2_count.append((irecocands,recocands))
-                                                                        self.h_jetchgpt2.Fill(recocands.p4().Perp(), self.totalWeight)
-                                                                        self.h_jetchgeta2.Fill(recocands.p4().Eta(), self.totalWeight)
-                                                                        self.h_jetchgphi2.Fill(recocands.p4().Phi(), self.totalWeight)
+                                                                        self.h_jetchgpt2.Fill(recocands.p4().Perp(), weight)
+                                                                        self.h_jetchgeta2.Fill(recocands.p4().Eta(), weight)
+                                                                        self.h_jetchgphi2.Fill(recocands.p4().Phi(), weight)
 								        irecocands += 1
                                                                         #mult2 += (multiplicity2)
                                                                         #leadjet2 += (recocands.p4().Perp())#, self.totalWeight)
-                                                                        self.h_mult_leadjet2.Fill(recojet.p4().Perp(), irecocands, self.totalWeight)
+                                                                        self.h_mult_leadjet2.Fill(recojet.p4().Perp(), irecocands, weight)
 							if (irecojet == 0):
 								recoCands1_count.append((irecocands,recocands))
 								Q1 += (1.0)*(recocands.charge)*(pow((recocands.p4().Perp()),1.0))
                                                         	jet1pt += pow(recojet.p4().Perp(),1.0)                                                                        
 								jetcharge1 += (1.0)*(Q1/jet1pt)
-								self.h_jetcharge1.Fill(jetcharge1, self.totalWeight)
+								self.h_jetcharge1.Fill(jetcharge1, weight)
 							if (irecojet == 1):
                                                                 recoCands2_count.append((irecocands,recocands))
                                                                 Q2 += (1.0)*(recocands.charge)*(pow((recocands.p4().Perp()),1.0))
                                                                 jet2pt += pow(recojet.p4().Perp(),1.0)
                                                                 jetcharge2 += (1.0)*(Q2/jet2pt)
-                                                                self.h_jetcharge2.Fill(jetcharge2, self.totalWeight)
+                                                                self.h_jetcharge2.Fill(jetcharge2, weight)
 								#print "Basic Distibutions using charged particles inside first Jet..."
 
 					self.out.fillBranch("rawjetpt", recojet.p4().Perp())
 	                		self.out.fillBranch("rawjeteta", recojet.p4().Eta())
         	        		self.out.fillBranch("rawjetphi", recojet.p4().Phi())
-					self.h_goodrecojetpt.Fill(recojet.p4().Perp(), self.totalWeight)
-	                		self.h_goodrecojeteta.Fill(recojet.p4().Eta(), self.totalWeight)
-                			self.h_goodrecojetphi.Fill(recojet.p4().Phi(), self.totalWeight)
+					self.h_goodrecojetpt.Fill(recojet.p4().Perp(), weight)
+	                		self.h_goodrecojeteta.Fill(recojet.p4().Eta(), weight)
+                			self.h_goodrecojetphi.Fill(recojet.p4().Phi(), weight)
 					if (irecojet == 0):
-						self.h_goodrecojetpt1.Fill(recojet.p4().Perp(), self.totalWeight)
-				                self.h_goodrecojeteta1.Fill(recojet.p4().Eta(), self.totalWeight)
-                				self.h_goodrecojetphi1.Fill(recojet.p4().Phi(), self.totalWeight)
+						self.h_goodrecojetpt1.Fill(recojet.p4().Perp(), weight)
+				                self.h_goodrecojeteta1.Fill(recojet.p4().Eta(), weight)
+                				self.h_goodrecojetphi1.Fill(recojet.p4().Phi(), weight)
 					if (irecojet == 1):
-						self.h_goodrecojetpt2.Fill(recojet.p4().Perp(), self.totalWeight)
-                                                self.h_goodrecojeteta2.Fill(recojet.p4().Eta(), self.totalWeight)
-                                                self.h_goodrecojetphi2.Fill(recojet.p4().Phi(), self.totalWeight)
+						self.h_goodrecojetpt2.Fill(recojet.p4().Perp(), weight)
+                                                self.h_goodrecojeteta2.Fill(recojet.p4().Eta(), weight)
+                                                self.h_goodrecojetphi2.Fill(recojet.p4().Phi(), weight)
 
 							
 		jet_sel = len(recojet_count)
@@ -248,12 +253,12 @@ class Jetcharge_skimNANO(Module):
 		recoCands2_sel = len(recoCands2_count)
 
 		self.out.fillBranch("nrecojet",jet_sel)
-		self.h_ngoodrecojet.Fill(jet_sel, self.totalWeight)
-		self.h_nrecoChgCands.Fill(recoChgCands_sel, self.totalWeight)
-		self.h_nrecoChgCands1.Fill(recoChgCands1_sel, self.totalWeight)
-		self.h_nrecoChgCands2.Fill(recoChgCands2_sel, self.totalWeight)
-		self.h_nrecoCands1.Fill(recoCands1_sel, self.totalWeight)
-                self.h_nrecoCands2.Fill(recoCands2_sel, self.totalWeight)
+		self.h_ngoodrecojet.Fill(jet_sel, weight)
+		self.h_nrecoChgCands.Fill(recoChgCands_sel, weight)
+		self.h_nrecoChgCands1.Fill(recoChgCands1_sel, weight)
+		self.h_nrecoChgCands2.Fill(recoChgCands2_sel, weight)
+		self.h_nrecoCands1.Fill(recoCands1_sel, weight)
+                self.h_nrecoCands2.Fill(recoCands2_sel, weight)
 
 				
 		#print "Return True"

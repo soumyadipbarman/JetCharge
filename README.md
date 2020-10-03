@@ -1,6 +1,6 @@
 # Jet Charge Observables at 13 TeV using NanoAOD format 
 
-# 20JUNE2020-v2
+# JUNE2020-v1
 This is the working version (Initial framework)
 
 # NanoAOD Workbook

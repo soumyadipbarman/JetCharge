@@ -1,0 +1,6 @@
+drop *
+#keep Jet*
+#keep JetPFCands*
+keep rawjetpt*
+keep rawjeteta*
+keep rawjetphi*

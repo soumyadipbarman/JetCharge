@@ -33,10 +33,10 @@ python runPostProcessing.py 0
 ```
 * To set root files for running the code locally use : [PSet.py](python/crab/runPostProcessor.py)
 * Use keep_and_drop.txt to truncate some branches before the job starts.
-* Use output_trees.txt to keep some branches and drop branches in the output root file.
+* Use output_trees.txt to keep and drop branches in the output root file.
 
 ### Crab Files
-* The script [script_runPostProcessor.sh](python/crab/script_runPostProcessor.sh) runs the runPostProcessor.py when the jobs are submit in the crab.
+* The script [script_runPostProcessor.sh](python/crab/script_runPostProcessor.sh) runs the runPostProcessor.py when the jobs are submitted to the crab.
 * Use [crab_DATA.py](python/crab/crab_DATA.py) for running the jobs on DATA using crab.
 * Use [crab_MC.py](python/crab/crab_MC.py) for running the jobs on MC using crab.
 ```

@@ -26,11 +26,12 @@ Tools for working with NanoAOD (requiring only python + root, not CMSSW)
   
 ## General instructions to run the post-processing step
 
-* The main code for running this module to create Histograms and Branches for ouput root files : [file](python/postprocessing/examples/skimmer.py)
-* To test the module locally: [file](python/crab/)
+* The main code for running this module to create Histograms and Branches for ouput root files : [skimmer.py](python/postprocessing/examples/skimmer.py)
+* To test the module locally: [runPostProcessor.py](python/crab/runPostProcessor.py)
 ```
 python runPostProcessing.py 0
 ```
+*
 ### Keep/drop branches
 
 

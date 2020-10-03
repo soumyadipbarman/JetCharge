@@ -27,18 +27,18 @@ This module uses NanoAOD Tools to skim over DATA and MC.
 ## General instructions to run the post-processing step
 
 * The main code for running this module to create Histograms and Branches for ouput root files : [skimmer.py](python/postprocessing/examples/skimmer.py)
-* To test the module locally use this file: [runPostProcessor.py](python/crab/runPostProcessor.py)
+* To test the module locally use this file: [runPostProcessor.py](crab/runPostProcessor.py)
 ```
 python runPostProcessing.py 0
 ```
-* To set root files for running the code locally use : [PSet.py](python/crab/runPostProcessor.py)
+* To set root files for running the code locally use : [PSet.py](crab/runPostProcessor.py)
 * Use keep_and_drop.txt to truncate some branches before the job starts.
 * Use output_trees.txt to keep and drop branches in the output root file.
 
 ### Crab Files
-* The script [script_runPostProcessor.sh](python/crab/script_runPostProcessor.sh) runs the runPostProcessor.py when the jobs are submitted to the crab.
-* Use [crab_DATA.py](python/crab/crab_DATA.py) for running the jobs on DATA using crab.
-* Use [crab_MC.py](python/crab/crab_MC.py) for running the jobs on MC using crab.
+* The script [script_runPostProcessor.sh](crab/script_runPostProcessor.sh) runs the runPostProcessor.py when the jobs are submitted to the crab.
+* Use [crab_DATA.py](crab/crab_DATA.py) for running the jobs on DATA using crab.
+* Use [crab_MC.py](crab/crab_MC.py) for running the jobs on MC using crab.
 ```
 crab submit -c crab_DATA.py
 crab submit -c crab_MC.py

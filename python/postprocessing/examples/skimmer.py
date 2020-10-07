@@ -105,6 +105,33 @@ class Jetcharge_skimNANO(Module):
      		
 		if self.EventCounter > self.EventLimit > -1:
                 	return False
+		
+		## Initialization ##
+
+		#recojets = []  
+                recojet_count = []
+                recoChgCands_count = []
+                recoChgCands1_count = []
+                recoChgCands2_count = []
+
+                recoCands1_count = []
+                recoCands2_count = []
+
+                Q1 = 0.0
+                jet1pt = 0.0
+                jetcharge1 = 0.0
+
+                Q2 = 0.0
+                jet2pt = 0.0
+                jetcharge2 = 0.0
+
+                multiplicity1 = 0
+                mult1 = 0
+                leadjet1 = 0.0
+
+                multiplicity2 = 0
+                mult2 = 0
+                leadjet2 = 0.0
 	
 		wtgen = 1.0
 		wttrg = 1.0
@@ -117,46 +144,20 @@ class Jetcharge_skimNANO(Module):
         	# List of reco jets:
         	allrecojets = list(Collection(event, "Jet"))
         	allrecoparts = list(Collection(event, "JetPFCands"))
-		#wtft = list(Collection(event, "genWeight"))
 
 		hlt = Object(event, self.hltBranchName)
-	
-		#recojets = []	
-		recojet_count = []
-		recoChgCands_count = []
-		recoChgCands1_count = []
-		recoChgCands2_count = []
 		
-		recoCands1_count = []
-		recoCands2_count = []
-
-		Q1 = 0.0
-		jet1pt = 0.0
-		jetcharge1 = 0.0
-		
-		Q2 = 0.0
-                jet2pt = 0.0
-                jetcharge2 = 0.0
-
-		multiplicity1 = 0
-		mult1 = 0
-		leadjet1 = 0.0
-
-		multiplicity2 = 0
-                mult2 = 0
-                leadjet2 = 0.0
-	
 		## Trigger Names ##
-		triggerpaths = [hlt.PFJet40 and allrecojets[0].pt >= 65,
-                               	hlt.PFJet60 and allrecojets[0].pt >= 80.06,
-                           	hlt.PFJet80 and allrecojets[0].pt >= 102.51,
-                            	hlt.PFJet140 and allrecojets[0].pt >= 190.57,
-                            	hlt.PFJet200 and allrecojets[0].pt >= 257.70,
-                            	hlt.PFJet260 and allrecojets[0].pt >= 332.01,
-                            	hlt.PFJet320 and allrecojets[0].pt >= 362.18,
-                            	hlt.PFJet400 and allrecojets[0].pt >= 457.39,
-                            	hlt.PFJet450 and allrecojets[0].pt >= 492.39,
-                            	hlt.PFJet500 and allrecojets[0].pt >= 579.14,
+		triggerpaths = [hlt.PFJet40 and allrecojets[0].pt >= 49,
+                               	hlt.PFJet60 and allrecojets[0].pt >= 84,
+                           	hlt.PFJet80 and allrecojets[0].pt >= 114,
+                            	hlt.PFJet140 and allrecojets[0].pt >= 196,
+                            	hlt.PFJet200 and allrecojets[0].pt >= 272,
+                            	hlt.PFJet260 and allrecojets[0].pt >= 330,
+                            	hlt.PFJet320 and allrecojets[0].pt >= 395,
+                            	hlt.PFJet400 and allrecojets[0].pt >= 468,
+                            	hlt.PFJet450 and allrecojets[0].pt >= 548,
+                            	hlt.PFJet500 and allrecojets[0].pt >= 686,
 			    	hlt.PFJet550]
                 
 		## Trigger prescale ##
@@ -196,14 +197,14 @@ class Jetcharge_skimNANO(Module):
 		## Main Analysis ##
 		
 		if (passedTrigger == True):
-			if (len(recojets) >= 2):# and (recojets[0].p4().Perp() > 400 and abs(recojets[0].p4().Eta()) < 1.5)  and (recojets[1].p4().Perp() > 100 and abs(recojets[1].p4().Eta()) < 1.5)):
-				#print "Dijet Event Selection..."
+			if (len(recojets) >= 2):# and (recojets[0].p4().Perp() > 400 and abs(recojets[0].p4().Eta()) < 1.5)  and (recojets[1].p4().Perp() > 100 and abs(recojets[1].p4().Eta()) < 1.5)):	
+			#print "Dijet Event Selection..."
 				for irecojet,recojet in enumerate(recojets):
-			#print "Start Jet Loop..."
+				#print "Start Jet Loop..."
 					recojet_count.append((irecojet,recojet))
-				#recojetscands[irecojet] = {}
-				# Cluster only the particles near the appropriate jet to save time
-                    		#constituents = ROOT.vector("TLorentzVector")()
+					#recojetscands[irecojet] = {}
+					# Cluster only the particles near the appropriate jet to save time
+                    			#constituents = ROOT.vector("TLorentzVector")()
 					constituents = []
 					for ipfCandsVec,ipfCandsChg in zip(pfCandsVec,pfCandsChg) :
 						#print "PF Loop..."
@@ -213,7 +214,7 @@ class Jetcharge_skimNANO(Module):
 							constituents.append(ipfCandsChg)
 							#recocands4v = ROOT.TLorentzVector()
 							#recocands4v = [ x for x in constituents ]
-					#if (irecojet == 0):
+							#if (irecojet == 0):
 							#print "First jet with only charged particles..."
 					for irecocands,recocands in enumerate(constituents):
 						if (recocands.p4().Perp() > 1):
@@ -231,16 +232,16 @@ class Jetcharge_skimNANO(Module):
 									irecocands += 1
 									#mult1 += (multiplicity1)
 									#leadjet1 += (recocands.p4().Perp())#, self.totalWeight)
-								#self.h_mult_leadjet1.Fill(recojet.p4().Perp(), irecocands, weight)
+									#self.h_mult_leadjet1.Fill(recojet.p4().Perp(), irecocands, weight)
 								if (irecojet == 1):
                                                         		recoChgCands2_count.append((irecocands,recocands))
                                                         		self.h_jetchgpt2.Fill(recocands.p4().Perp(), weight)
                                                         		self.h_jetchgeta2.Fill(recocands.p4().Eta(), weight)
                                                         		self.h_jetchgphi2.Fill(recocands.p4().Phi(), weight)
 									irecocands += 1
-                                                                        #mult2 += (multiplicity2)
+                                                                	#mult2 += (multiplicity2)
                                                                         #leadjet2 += (recocands.p4().Perp())#, self.totalWeight)
-                                                        	#self.h_mult_leadjet2.Fill(recojet.p4().Perp(), irecocands, weight)
+                                                        		#self.h_mult_leadjet2.Fill(recojet.p4().Perp(), irecocands, weight)
 							if (irecojet == 0):
 								recoCands1_count.append((irecocands,recocands))
 								Q1 += (1.0)*(recocands.charge)*(pow((recocands.p4().Perp()),1.0))
@@ -308,13 +309,6 @@ class Jetcharge_skimNANO(Module):
 #		print "ElectronID_presel:", jetsel
 
 #print(Module.event)
-
-"""
-preselection="Jet_pt[0] > 400"
-files=["root://cmsxrootd.fnal.gov//store/data/Run2017B/JetHT/NANOAOD/Nano25Oct2019-v1/40000/F444480C-9D10-4041-9F8E-A67CF1D98368.root"]
-p=PostProcessor(".",files,cut=preselection,branchsel=None,modules=[Jetcharge_skimNANO()],noOut=True,histFileName="histOut.root",histDirName="jets13")
-p.run()
-"""
 
 # define modules using the syntax 'name = lambda : constructor' to avoid having them loaded when not needed
 

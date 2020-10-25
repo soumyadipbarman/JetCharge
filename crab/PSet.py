@@ -8,9 +8,11 @@ process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring(),
 )
 process.source.fileNames = [
 # JetHT 2017 Custom NanoAOD DATA
-'root://cms-xrd-global.cern.ch//store/user/algomez/PFNano/106x_v01/JetHT/Run2017B-09Aug2019_UL2017-v1_PFNanoAOD/200716_075309/0000/nano106X_on_mini106X_2017_data_NANO_372.root',
-'root://cms-xrd-global.cern.ch//store/user/algomez/PFNano/106x_v01/JetHT/Run2017B-09Aug2019_UL2017-v1_PFNanoAOD/200716_075309/0000/nano106X_on_mini106X_2017_data_NANO_373.root',
-'root://cms-xrd-global.cern.ch//store/user/algomez/PFNano/106x_v01/JetHT/Run2017B-09Aug2019_UL2017-v1_PFNanoAOD/200716_075309/0000/nano106X_on_mini106X_2017_data_NANO_374.root',
+#'root://cms-xrd-global.cern.ch//store/user/algomez/PFNano/106x_v01/JetHT/Run2017B-09Aug2019_UL2017-v1_PFNanoAOD/200716_075309/0000/nano106X_on_mini106X_2017_data_NANO_370.root',
+'root://cms-xrd-global.cern.ch//store/user/algomez/PFNano/106x_v01/JetHT/Run2017B-09Aug2019_UL2017-v1_PFNanoAOD/200716_075309/0000/nano106X_on_mini106X_2017_data_NANO_371.root',
+#'root://cms-xrd-global.cern.ch//store/user/algomez/PFNano/106x_v01/JetHT/Run2017B-09Aug2019_UL2017-v1_PFNanoAOD/200716_075309/0000/nano106X_on_mini106X_2017_data_NANO_372.root',
+#'root://cms-xrd-global.cern.ch//store/user/algomez/PFNano/106x_v01/JetHT/Run2017B-09Aug2019_UL2017-v1_PFNanoAOD/200716_075309/0000/nano106X_on_mini106X_2017_data_NANO_373.root',
+#'root://cms-xrd-global.cern.ch//store/user/algomez/PFNano/106x_v01/JetHT/Run2017B-09Aug2019_UL2017-v1_PFNanoAOD/200716_075309/0000/nano106X_on_mini106X_2017_data_NANO_374.root',
 #'root://cms-xrd-global.cern.ch//store/user/algomez/PFNano/106x_v01/JetHT/Run2017D-09Aug2019_UL2017-v1_PFNanoAOD/200716_075602/0000/nano106X_on_mini106X_2017_data_NANO_163.root',
 
 # JetHT	2017 Custom NanoAOD MC

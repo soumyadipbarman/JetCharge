@@ -4,7 +4,7 @@ from CRABClient.UserUtilities import config # getUsernameFromSiteDB
 config = Configuration()
 
 config.section_("General")
-config.General.requestName = 'JetHT_Run_UL2017_MC-v3'
+config.General.requestName = 'JetHT_Run_UL2017_MC-v5'
 config.General.workArea = 'crab_GJets'
 config.General.transferLogs=True
 config.section_("JobType")
@@ -12,8 +12,8 @@ config.JobType.allowUndistributedCMSSW = True
 config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'PSet.py'
 config.JobType.outputFiles = ['JetCharge_skimmer-trees.root','JetCharge_skimmer-histOut_MC.root']
-config.JobType.scriptExe = 'run_modules.sh'
-config.JobType.inputFiles = ['PSet.py','run_modules.sh','run_modules_test.py','haddnano.py','keep_and_drop.txt'] #hadd nano will not be needed once nano tools are in cmssw
+config.JobType.scriptExe = 'script_runPostProcessor.sh'
+config.JobType.inputFiles = ['PSet.py','script_runPostProcessor.sh','runPostProcessor.py','haddnano.py','keep_and_drop.txt','output_tree.txt'] #hadd nano will not be needed once nano tools are in cmssw
 config.JobType.sendPythonFolder	 = True
 config.section_("Data")
 config.Data.inputDBS = 'phys03'
@@ -26,7 +26,7 @@ config.Data.unitsPerJob = 1
 #config.Data.totalUnits = 10
 #config.Data.lumiMask = '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions17/13TeV/Legacy_2017/Cert_294927-306462_13TeV_UL2017_Collisions17_GoldenJSON.txt'
 #config.Data.outLFNDirBase = '/store/user/%s/GJets' % (getUsernameFromSiteDB())
-config.Data.outLFNDirBase = '/store/user/sobarman/'
+config.Data.outLFNDirBase = '/store/user/sobarman/JetCharge/'
 config.Data.publication = False
 config.Data.outputDatasetTag = 'JetCharge_NanoAOD_skimmer_JetHT_Run_UL2017_MC'
 config.section_("Site")

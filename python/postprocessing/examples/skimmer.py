@@ -32,7 +32,7 @@ class Jetcharge_skimNANO(Module):
 		
 		### Kinematics Cuts ###
         	self.minJetPt = 30.
-        	self.maxJetEta = 2.4
+        	self.maxJetEta = 2.5
 
         def beginJob(self, histFile, histDirName):
 		Module.beginJob(self, histFile, histDirName)
@@ -184,6 +184,8 @@ class Jetcharge_skimNANO(Module):
 			#		wttrg = trigprescale
 					#print ("Trigger Name :"+str(trigname),"prescale :"+str(wttrg))
 			#		passedTrigger = True
+
+			## For checking single trigger path
 			if (hlt.PFJet320 ==1):
 				wttrg = 1.0
 				passedTrigger = True

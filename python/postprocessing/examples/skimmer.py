@@ -159,47 +159,44 @@ class Jetcharge_skimNANO(Module):
                 #            	hlt.PFJet500 and allrecojets[0].pt >= 686,
 		#	    	hlt.PFJet550]
 
-		#triggerpaths = [hlt.PFJet40,
-                #                hlt.PFJet60,
-                #                hlt.PFJet80,
-                #                hlt.PFJet140,
-                #                hlt.PFJet200,
-                #                hlt.PFJet260,
-                #                hlt.PFJet320,
-                #                hlt.PFJet400,
-                #                hlt.PFJet450,
-                #                hlt.PFJet500,
-                #                hlt.PFJet550]
+		triggerpaths = [hlt.PFJet40,
+                                hlt.PFJet60,
+                                hlt.PFJet80,
+                                hlt.PFJet140,
+                                hlt.PFJet200,
+                                hlt.PFJet260,
+                                hlt.PFJet320,
+                                hlt.PFJet400,
+                                hlt.PFJet450,
+                                hlt.PFJet500,
+                                hlt.PFJet550]
 
                 
 		## Trigger prescale ##
 
 		#triggerprescale = [237260,123000,27300,2400,600,148,59,21,12,1]
-		#triggerprescale = [86065,36422,9622,1040,190,74,29,10,4,1,1]
+		triggerprescale = [86065,36422,9622,1040,190,74,29,10,4,1,1]
 
 		passedTrigger = False
 		try:
-			#for trigname, trigprescale in zip(triggerpaths,triggerprescale):
-			#	if (trigname == 1):
-			#		wttrg = trigprescale
-					#print ("Trigger Name :"+str(trigname),"prescale :"+str(wttrg))
-			#		passedTrigger = True
+			for trigname, trigprescale in zip(triggerpaths,triggerprescale):
+				if (trigname == 1):
+					wttrg = trigprescale
+					print ("Trigger Name :"+str(trigname),"prescale :"+str(wttrg))
+					passedTrigger = True
 
 			## For checking single trigger path
-			if (hlt.PFJet320 ==1):
-				wttrg = 1.0
-				passedTrigger = True
+			#if (hlt.PFJet320 ==1):
+			#	wttrg = 1.0
+			#	passedTrigger = True
 
 		except:
 			passedTrigger = False
 
-		if (passedTrigger == True):
-			weight = wtgen*wttrg
-			#print ("Total weight :"+str(weight))	
 		
-		## FOR MC Weight
-		#weight = wtgen	
-		#print ("Total weight2 :"+str(weight))
+		## Total Weight ##
+		weight = wtgen*wttrg
+		print ("Total weight :"+str(weight))
 
 		# All the particles within jets		
 		pfcharged = [x for x in allrecoparts] # if (x.charge != 0)]
@@ -241,7 +238,7 @@ class Jetcharge_skimNANO(Module):
 						self.h_jetchgpt.Fill(recocands.p4().Perp(), weight)
                                                 self.h_jetchgeta.Fill(recocands.p4().Eta(), weight)
                                                 self.h_jetchgphi.Fill(recocands.p4().Phi(), weight)
-						#print ("Weight on histograms1 :"+str(weight))
+						print ("Weight on histograms1 :"+str(weight))
 						if (irecojet == 0):
 							recoChgCands1_count.append((irecocands,recocands))
 							self.h_jetchgpt1.Fill(recocands.p4().Perp(), weight)
@@ -260,7 +257,7 @@ class Jetcharge_skimNANO(Module):
                                                         #mult2 += (multiplicity2)
                                                         #leadjet2 += (recocands.p4().Perp())#, self.totalWeight)
                                                         #self.h_mult_leadjet2.Fill(recojet.p4().Perp(), irecocands, weight)
-							#print ("Weight on histograms2 :"+str(weight))
+							print ("Weight on histograms2 :"+str(weight))
 					if (irecojet == 0):
 						recoCands1_count.append((irecocands,recocands))
 						Q1 += (1.0)*(recocands.charge)*(pow((recocands.p4().Perp()),1.0))

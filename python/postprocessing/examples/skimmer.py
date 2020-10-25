@@ -34,8 +34,6 @@ class Jetcharge_skimNANO(Module):
         	self.minJetPt = 30.
         	self.maxJetEta = 2.4
 
-		#self.weight = 1.0
-
         def beginJob(self, histFile, histDirName):
 		Module.beginJob(self, histFile, histDirName)
 		
@@ -44,16 +42,16 @@ class Jetcharge_skimNANO(Module):
 		self.histotype = ['h_']
 		
 		for ihist, hist in enumerate(self.histotype):
-		    self.addObject( ROOT.TH1F(hist + 'ngoodrecojet',            hist + 'ngoodrecojet',        10, 2, 12 ))
-		    self.addObject( ROOT.TH1F(hist + 'goodrecojetpt',           hist + 'goodrecojetpt',        200, 20, 2020 ) )
+		    self.addObject( ROOT.TH1F(hist + 'ngoodrecojet',            hist + 'ngoodrecojet',        8, 2, 10 ))
+		    self.addObject( ROOT.TH1F(hist + 'goodrecojetpt',           hist + 'goodrecojetpt',        160, 400, 2000 ) )
 		    self.addObject( ROOT.TH1F(hist + 'goodrecojeteta',          hist + 'goodrecojeteta',        100, -2.4, 2.4 ) )
 		    self.addObject( ROOT.TH1F(hist + 'goodrecojetphi',          hist + 'goodrecojetphi',        100, -3.0, 3.0 ) )
 		    
-		    self.addObject( ROOT.TH1F(hist + 'goodrecojetpt1',           hist + 'goodrecojetpt1',        200, 20, 2020 ) )
+		    self.addObject( ROOT.TH1F(hist + 'goodrecojetpt1',           hist + 'goodrecojetpt1',        160, 400, 2000 ) )
                     self.addObject( ROOT.TH1F(hist + 'goodrecojeteta1',          hist + 'goodrecojeteta1',        100, -2.4, 2.4 ) )
                     self.addObject( ROOT.TH1F(hist + 'goodrecojetphi1',          hist + 'goodrecojetphi1',        100, -3.0, 3.0 ) )
 
-                    self.addObject( ROOT.TH1F(hist + 'goodrecojetpt2',           hist + 'goodrecojetpt2',        200, 20, 2020 ) )
+                    self.addObject( ROOT.TH1F(hist + 'goodrecojetpt2',           hist + 'goodrecojetpt2',        160, 400, 2000 ) )
                     self.addObject( ROOT.TH1F(hist + 'goodrecojeteta2',          hist + 'goodrecojeteta2',        100, -2.4, 2.4 ) )
                     self.addObject( ROOT.TH1F(hist + 'goodrecojetphi2',          hist + 'goodrecojetphi2',        100, -3.0, 3.0 ) )
 		   
@@ -107,8 +105,7 @@ class Jetcharge_skimNANO(Module):
                 	return False
 		
 		## Initialization ##
-
-		#recojets = []  
+ 
                 recojet_count = []
                 recoChgCands_count = []
                 recoChgCands1_count = []
@@ -134,16 +131,13 @@ class Jetcharge_skimNANO(Module):
                 leadjet2 = 0.0
 	
 		wtgen = 1.0
-		#wtpu = 1.0
 		wttrg = 1.0
 		weight = 1.0
 
+		## Generator Weight ##
         	if hasattr( event, "genWeight"):
             		wtgen = event.genWeight
 		
-		#if hasattr( event, "puWeight"):
-                #        wtpu = event.puWeight
-
 		###### Get list of reco jets #######
         	# List of reco jets:
         	allrecojets = list(Collection(event, "Jet"))
@@ -164,30 +158,33 @@ class Jetcharge_skimNANO(Module):
                 #            	hlt.PFJet500 and allrecojets[0].pt >= 686,
 		#	    	hlt.PFJet550]
 
-		triggerpaths = [hlt.PFJet40,
-                                hlt.PFJet60,
-                                hlt.PFJet80,
-                                hlt.PFJet140,
-                                hlt.PFJet200,
-                                hlt.PFJet260,
-                                hlt.PFJet320,
-                                hlt.PFJet400,
-                                hlt.PFJet450,
-                                hlt.PFJet500,
-                                hlt.PFJet550]
+		#triggerpaths = [hlt.PFJet40,
+                #                hlt.PFJet60,
+                #                hlt.PFJet80,
+                #                hlt.PFJet140,
+                #                hlt.PFJet200,
+                #                hlt.PFJet260,
+                #                hlt.PFJet320,
+                #                hlt.PFJet400,
+                #                hlt.PFJet450,
+                #                hlt.PFJet500,
+                #                hlt.PFJet550]
 
                 
 		## Trigger prescale ##
 		#triggerprescale = [237260,123000,27300,2400,600,148,59,21,12,1]
-		triggerprescale = [86065,36422,9622,1040,190,74,29,10,4,1,1]
+		#triggerprescale = [86065,36422,9622,1040,190,74,29,10,4,1,1]
 
 		passedTrigger = False
 		try:
-			for trigname, trigprescale in zip(triggerpaths,triggerprescale):
-				if (trigname == 1):
-					wttrg = trigprescale
+			#for trigname, trigprescale in zip(triggerpaths,triggerprescale):
+			#	if (trigname == 1):
+			#		wttrg = trigprescale
 					#print ("Trigger Name :"+str(trigname),"prescale :"+str(wttrg))
-					passedTrigger = True
+			#		passedTrigger = True
+			if (hlt.PFJet320 ==1):
+				wttrg = 1.0
+				passedTrigger = True
 
 		except:
 			passedTrigger = False
@@ -208,11 +205,10 @@ class Jetcharge_skimNANO(Module):
 		pfCandsChg = []
 		for p in pfcharged :
                 	pfCandsVec.push_back( ROOT.TLorentzVector( p.p4().Px(), p.p4().Py(), p.p4().Pz(), p.p4().E()) )
-			#pfCandsChg.push_back(p)
 			pfCandsChg.append(p)
 
 		### applying basic selection to jets
-                recojets = [ x for x in allrecojets if x.p4().Perp() > self.minJetPt and abs(x.p4().Eta()) < self.maxJetEta and x.jetId>=2 ]  # recheck JETID criteria
+                recojets = [ x for x in allrecojets if x.p4().Perp() > self.minJetPt and abs(x.p4().Eta()) < self.maxJetEta and x.jetId>=2 ] 
                 recojets.sort(key=lambda x:x.p4().Perp(),reverse=True)
 
 		## Main Analysis ##
@@ -224,23 +220,17 @@ class Jetcharge_skimNANO(Module):
 		if (len(recojets) < 2):	
 			return False
 		#print "Dijet Event Selection..."
+
 		for irecojet,recojet in enumerate(recojets):
 			#print "Start Jet Loop..."
 			recojet_count.append((irecojet,recojet))
-			#recojetscands[irecojet] = {}
-			# Cluster only the particles near the appropriate jet to save time
-                    	#constituents = ROOT.vector("TLorentzVector")()
 			constituents = []
 			for ipfCandsVec,ipfCandsChg in zip(pfCandsVec,pfCandsChg) :
 				#print "PF Loop..."
-                		if abs(recojet.p4().DeltaR( ipfCandsVec )) < 0.4: # and x.charge:
+				# Cluster only the particles near the appropriate jet to save time
+                		if abs(recojet.p4().DeltaR( ipfCandsVec )) < 0.4:
 					#print "Select Particles within cone 0.4..."
-                    			#constituents.push_back( ROOT.TLorentzVector( x.p4().Px(), x.p4().Py(), x.p4().Pz(), x.p4().E()) )
 					constituents.append(ipfCandsChg)
-					#recocands4v = ROOT.TLorentzVector()
-					#recocands4v = [ x for x in constituents ]
-					#if (irecojet == 0):
-					#print "First jet with only charged particles..."
 			for irecocands,recocands in enumerate(constituents):
 				if (recocands.p4().Perp() > 1):
 					if (recocands.charge != 0):
@@ -256,7 +246,7 @@ class Jetcharge_skimNANO(Module):
                                                         self.h_jetchgphi1.Fill(recocands.p4().Phi(), weight)
 							irecocands += 1
 							#mult1 += (multiplicity1)
-							#leadjet1 += (recocands.p4().Perp())#, self.totalWeight)
+							#leadjet1 += (recocands.p4().Perp())#, self.to
 							#self.h_mult_leadjet1.Fill(recojet.p4().Perp(), irecocands, weight)
 						if (irecojet == 1):
                                                         recoChgCands2_count.append((irecocands,recocands))
@@ -322,24 +312,7 @@ class Jetcharge_skimNANO(Module):
 		return True
 
 
-	#print "Number of jets :" + str(xyz)
-#print "Ok Done :"(jetsel)
-#printer = Jetcharge_skimNANO()
-#print printer.__init()__
-#printer = Jetcharge_skimNANO()
-#printer.analyze()
-
-	#def printer(self):
-		#return self.jetsel
-#epson = Jetcharge_skimNANO()
-#epson.printer()
-
-#if __name__ == "__main__":
-#	if analyze():
-#		print "ElectronID_presel:", jetsel
-
-#print(Module.event)
-
+	
 # define modules using the syntax 'name = lambda : constructor' to avoid having them loaded when not needed
 
 #jetskimmer = lambda : Jetcharge_skimNANO(jetSelection= lambda j : j.pt > 30)

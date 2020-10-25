@@ -146,6 +146,7 @@ class Jetcharge_skimNANO(Module):
 		hlt = Object(event, self.hltBranchName)
 		
 		## Trigger Names ##
+
 		#triggerpaths = [hlt.PFJet40 and allrecojets[0].pt >= 49,
                 #               hlt.PFJet60 and allrecojets[0].pt >= 84,
                 #           	hlt.PFJet80 and allrecojets[0].pt >= 114,
@@ -172,6 +173,7 @@ class Jetcharge_skimNANO(Module):
 
                 
 		## Trigger prescale ##
+
 		#triggerprescale = [237260,123000,27300,2400,600,148,59,21,12,1]
 		#triggerprescale = [86065,36422,9622,1040,190,74,29,10,4,1,1]
 
@@ -211,25 +213,24 @@ class Jetcharge_skimNANO(Module):
                 recojets = [ x for x in allrecojets if x.p4().Perp() > self.minJetPt and abs(x.p4().Eta()) < self.maxJetEta and x.jetId>=2 ] 
                 recojets.sort(key=lambda x:x.p4().Perp(),reverse=True)
 
+
 		## Main Analysis ##
 		
 		if (passedTrigger == False):
 			return False
 		
-		#if ((len(recojets) < 2) and (recojets[0].p4().Perp() > 400 and abs(recojets[0].p4().Eta()) < 1.5)  and (recojets[1].p4().Perp() > 100 and abs(recojets[1].p4().Eta()) < 1.5)):
+		# if ((len(recojets) < 2) and (recojets[0].p4().Perp() > 400 and abs(recojets[0].p4().Eta()) < 1.5)  and (recojets[1].p4().Perp() > 100 and abs(recojets[1].p4().Eta()) < 1.5)):
+
+		# Select at least 2 jets in event or return false
 		if (len(recojets) < 2):	
 			return False
-		#print "Dijet Event Selection..."
 
 		for irecojet,recojet in enumerate(recojets):
-			#print "Start Jet Loop..."
 			recojet_count.append((irecojet,recojet))
 			constituents = []
 			for ipfCandsVec,ipfCandsChg in zip(pfCandsVec,pfCandsChg) :
-				#print "PF Loop..."
 				# Cluster only the particles near the appropriate jet to save time
                 		if abs(recojet.p4().DeltaR( ipfCandsVec )) < 0.4:
-					#print "Select Particles within cone 0.4..."
 					constituents.append(ipfCandsChg)
 			for irecocands,recocands in enumerate(constituents):
 				if (recocands.p4().Perp() > 1):
@@ -271,7 +272,6 @@ class Jetcharge_skimNANO(Module):
                                                 jetcharge2 += (1.0)*(Q2/jet2pt)
                                                 self.h_jetcharge2.Fill(jetcharge2, weight)
 						#print ("Weight on histograms3 :"+str(weight))
-						#print "Basic Distibutions using charged particles inside first Jet..."
 
 			self.out.fillBranch("rawjetpt", recojet.p4().Perp())
 	                self.out.fillBranch("rawjeteta", recojet.p4().Eta())
@@ -307,8 +307,6 @@ class Jetcharge_skimNANO(Module):
                 self.h_nrecoCands2.Fill(recoCands2_sel, weight)
 		#print ("Weight on histograms6 :"+str(weight))
 
-				
-		#print "Return True"
 		return True
 
 

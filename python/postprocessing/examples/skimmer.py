@@ -137,6 +137,7 @@ class Jetcharge_skimNANO(Module):
 		## Generator Weight ##
         	if hasattr( event, "genWeight"):
             		wtgen = event.genWeight
+			print ("Generator weight :"+str(wtgen))
 		
 		###### Get list of reco jets #######
         	# List of reco jets:
@@ -159,39 +160,28 @@ class Jetcharge_skimNANO(Module):
                 #            	hlt.PFJet500 and allrecojets[0].pt >= 686,
 		#	    	hlt.PFJet550]
 
-		triggerpaths = [hlt.PFJet40,
-                                hlt.PFJet60,
-                                hlt.PFJet80,
-                                hlt.PFJet140,
-                                hlt.PFJet200,
-                                hlt.PFJet260,
-                                hlt.PFJet320,
-                                hlt.PFJet400,
-                                hlt.PFJet450,
-                                hlt.PFJet500,
-                                hlt.PFJet550]
+		#triggerpaths = [hlt.PFJet40,hlt.PFJet60,hlt.PFJet80,hlt.PFJet140,hlt.PFJet200,hlt.PFJet260,hlt.PFJet320,hlt.PFJet400,hlt.PFJet450,hlt.PFJet500,hlt.PFJet550]
 
-                
 		## Trigger prescale ##
 
 		#triggerprescale = [237260,123000,27300,2400,600,148,59,21,12,1]
-		triggerprescale = [86065,36422,9622,1040,190,74,29,10,4,1,1]
+		#triggerprescale = [86065,36422,9622,1040,190,74,29,10,4,1,1]
 
-		passedTrigger = False
-		try:
-			for trigname, trigprescale in zip(triggerpaths,triggerprescale):
-				if (trigname == 1):
-					wttrg = trigprescale
-					print ("Trigger Name :"+str(trigname),"prescale :"+str(wttrg))
-					passedTrigger = True
+		#passedTrigger = False
+		#try:
+		#	for trigname, trigprescale in zip(triggerpaths,triggerprescale):
+		#		if (trigname == 1):
+		#			wttrg = trigprescale
+		#			print ("Trigger Name :"+str(trigname),"prescale :"+str(wttrg))
+		#			passedTrigger = True
 
 			## For checking single trigger path
 			#if (hlt.PFJet320 ==1):
 			#	wttrg = 1.0
 			#	passedTrigger = True
 
-		except:
-			passedTrigger = False
+		#except:
+		#	passedTrigger = False
 
 		
 		## Total Weight ##
@@ -215,8 +205,8 @@ class Jetcharge_skimNANO(Module):
 
 		## Main Analysis ##
 		
-		if (passedTrigger == False):
-			return False
+		#if (passedTrigger == False):
+		#	return False
 		
 		# if ((len(recojets) < 2) and (recojets[0].p4().Perp() > 400 and abs(recojets[0].p4().Eta()) < 1.5)  and (recojets[1].p4().Perp() > 100 and abs(recojets[1].p4().Eta()) < 1.5)):
 
